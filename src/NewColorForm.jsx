@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuid } from 'uuid';
 
 /** Form for adding a new color to colorList.
  *
@@ -8,12 +9,13 @@ import { useNavigate } from "react-router-dom";
  * to ColorList component to display color when color link is clicked on.
  *
  */
-function NewColorForm ({ addColors }) {
+function NewColorForm ({addColor}) {
     const INITIAL_STATE = {
         name: '',
         value: ''
     }
 
+    const navigate = useNavigate();
     /**
      * formDate is an object that holds 
      *  {colorName, colorVal}
@@ -22,6 +24,7 @@ function NewColorForm ({ addColors }) {
 
     /** Update local state w/curr state of input elem */
     function handleChange (event) {
+        // console.log(formData);
         const { name, value } = event.target;
         setFormData(formData => ({
             ...formData,
@@ -32,31 +35,35 @@ function NewColorForm ({ addColors }) {
     /** Send {colorName, colorVal} to parent
     *    & clear form. */
     function handleSubmit (event) {
-        const navigate = useNavigate()
         event.preventDefault();
-        navigate()
-        addColors(formData);
+        addColor(colors => {
+            const newColorsList = [...colors, {...formData, id:uuid()}]
+            const colorsString = JSON.stringify(newColorsList);
+            localStorage.setItem("colorsList", colorsString);
+            return newColorsList;
+        });
         setFormData(INITIAL_STATE);
+        navigate('/colors');
     }
 
     /** render form */
     return (
         <form onSubmit={handleSubmit}>
-            <label htmlFor="colorName">Color Name: </label>
+            <label htmlFor="name">Color Name: </label>
             <input
-                id="colorName"
+                id="name"
                 type="text"
-                name="colorName"
+                name="name"
                 placeholder="color name"
                 value={formData.name}
                 onChange={handleChange}
                 required
             />
-            <label htmlFor="colorVal">Color Value: </label>
+            <label htmlFor="value">Color Value: </label>
             <input
-                id="colorVal"
+                id="value"
                 type="color"
-                name="colorVal"
+                name="value"
                 placeholder="Color Value"
                 value={formData.value}
                 onChange={handleChange}

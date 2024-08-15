@@ -1,27 +1,21 @@
-import React, {useState} from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 
-function ColorList ({newColor}) {
-    const [colors, setColors] = useState([]);
-
-    function addColors (color) {
-        setColors(colors => [...colors, color]);
-    }
-
-    addColors(newColor);
+function ColorList ({colors}) {
 
     return (
         <div>
             <h1>Welcome to the Color Factory</h1>
-            <h2>Add a Color</h2>
+            <h2><Link to={`/colors/new`}>Add a Color</Link></h2>
             <h3>PLease Select a Color</h3>
-            <ul>
-                {colors.map(color => (
-                    <li><Link key={color.value} to={`/colors/${color.name.toLowerCase()}`}>{color.name}</Link></li>
-                ))}
-            </ul>
-
+            {<ul>
+                {colors.length !== 0 ? 
+                colors.map(color => (
+                    <li key={color.id}><Link to={`/colors/${color.name}`}>{color.name}</Link></li>
+                )) : 
+                <h3>No Colors Currently</h3>}
+            </ul>}
         </div>
     )
 }
