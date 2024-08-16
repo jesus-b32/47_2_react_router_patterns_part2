@@ -37,7 +37,7 @@ function NewColorForm ({addColor}) {
     function handleSubmit (event) {
         event.preventDefault();
         addColor(colors => {
-            const newColorsList = [...colors, {...formData, id:uuid()}]
+            const newColorsList = [{...formData, id:uuid()}, ...colors]
             const colorsString = JSON.stringify(newColorsList);
             localStorage.setItem("colorsList", colorsString);
             return newColorsList;

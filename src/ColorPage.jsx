@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import './ColorPage.css';
 
@@ -12,6 +12,10 @@ function ColorPage ({colors}) {
         if(!colorObj) navigate("/colors");
         return;
     }
+
+    useEffect(() => {
+        notAColor();
+    }, []);
     
     return (
         <div>
